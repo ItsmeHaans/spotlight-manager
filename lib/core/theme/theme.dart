@@ -1,79 +1,144 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-enum AppThemeName { yellowNeon, blue, silver, pinkRose }
+enum AppThemeName {
+  yellowLight,
+  yellowDark,
+  blueLight,
+  blueDark,
+  silverLight,
+  silverDark,
+  pinkLight,
+  pinkDark,
+}
 
 class AppColors {
   final Color primary;
   final Color secondary;
   final Color background;
-  final Color surface;
+  final Color sidebar;
   final Color error;
   final Color textPrimary;
   final Color textSecondary;
+  final Color textTitle;
 
   const AppColors({
     required this.primary,
     required this.secondary,
     required this.background,
-    required this.surface,
+    required this.sidebar,
     required this.error,
     required this.textPrimary,
     required this.textSecondary,
+    required this.textTitle,
   });
 }
 
 class AppThemes {
-  static const yellowNeon = AppColors(
-    primary: Color(0xFFF5E000),
-    secondary: Color(0xFFFFF176),
-    background: Color(0xFF121212),
-    surface: Color(0xFF1E1E1E),
+  static const yellowLight = AppColors(
+    primary: Color(0xFFC9BE3F),
+    secondary: Color(0xFFEDE9B8),
+    background: Color(0xFFFBFBF2),
+    sidebar: Color(0xFFEDE9B8),
     error: Color(0xFFFF5252),
-    textPrimary: Color(0xFFFFFFFF),
-    textSecondary: Color(0xFFB0B0B0),
+    textPrimary: Color(0xFF2E2C1E),
+    textSecondary: Color(0xFFFBFBF2),
+    textTitle: Color(0xFF2E2C1E),
+  );
+  static const yellowDark = AppColors(
+    primary: Color(0xFFC9BE3F),
+    secondary: Color(0xFFEDE9B8),
+    background: Color(0xFF2E2C1E),
+    sidebar: Color(0xFFEDE9B8),
+    error: Color(0xFFFF5252),
+    textPrimary: Color(0xFF2E2C1E),
+    textSecondary: Color(0xFFFBFBF2),
+    textTitle: Color(0xFFFBFBF2),
   );
 
-  static const blue = AppColors(
-    primary: Color(0xFF2979FF),
-    secondary: Color(0xFF82B1FF),
-    background: Color(0xFF0D1117),
-    surface: Color(0xFF161B22),
+  static const blueLight = AppColors(
+    primary: Color(0xFF445D82),
+    secondary: Color(0xFF7C93B3),
+    background: Color(0xFFF4F6F9),
+    sidebar: Color(0xFF7C93B3),
     error: Color(0xFFFF5252),
-    textPrimary: Color(0xFFFFFFFF),
-    textSecondary: Color(0xFFA0A8B4),
+    textPrimary: Color(0xFF1E2530),
+    textSecondary: Color(0xFFF4F6F9),
+    textTitle: Color(0xFF1E2530),
   );
 
-  static const silver = AppColors(
-    primary: Color(0xFFC7C9CC),
-    secondary: Color(0xFFE8E9EB),
-    background: Color(0xFF1A1A1C),
-    surface: Color(0xFF242426),
+  static const blueDark = AppColors(
+    primary: Color(0xFF445D82),
+    secondary: Color(0xFF7C93B3),
+    background: Color(0xFF1E2530),
+    sidebar: Color(0xFF7C93B3),
+    error: Color(0xFFFF5252),
+    textPrimary: Color(0xFF1E2530),
+    textSecondary: Color(0xFFF4F6F9),
+    textTitle: Color(0xFFF4F6F9),
+  );
+
+  static const silverLight = AppColors(
+    primary: Color(0xFF6E7A85),
+    secondary: Color(0xFFC7CDD3),
+    background: Color(0xFFF5F6F7),
+    sidebar: Color(0xFFC7CDD3),
     error: Color(0xFFFF6B6B),
-    textPrimary: Color(0xFFF5F5F5),
-    textSecondary: Color(0xFF9A9A9C),
+    textPrimary: Color(0xFF2A2E33),
+    textSecondary: Color(0xFFF5F6F7),
+    textTitle: Color(0xFF2A2E33),
+  );
+  static const silverDark = AppColors(
+    primary: Color(0xFF6E7A85),
+    secondary: Color(0xFFC7CDD3),
+    background: Color(0xFF2A2E33),
+    sidebar: Color(0xFFC7CDD3),
+    error: Color(0xFFFF6B6B),
+    textPrimary: Color(0xFF2A2E33),
+    textSecondary: Color(0xFFF5F6F7),
+    textTitle: Color(0xFFF5F6F7),
   );
 
-  static const pinkRose = AppColors(
-    primary: Color(0xFFF5A3C7),
-    secondary: Color(0xFFFCD3E3),
-    background: Color(0xFF1B1216),
-    surface: Color(0xFF241A1E),
+  static const pinkLight = AppColors(
+    primary: Color(0xFFE0899C),
+    secondary: Color(0xFFF2C6CE),
+    background: Color(0xFFFBF6F5),
+    sidebar: Color(0xFFF2C6CE),
     error: Color(0xFFFF5C7A),
-    textPrimary: Color(0xFFFFFFFF),
-    textSecondary: Color(0xFFC9A9B4),
+    textPrimary: Color(0xFF2B2024),
+    textSecondary: Color(0xFFFBF6F5),
+    textTitle: Color(0xFF2B2024),
+  );
+
+  static const pinkDark = AppColors(
+    primary: Color(0xFFE0899C),
+    secondary: Color(0xFFF2C6CE),
+    background: Color(0xFF2B2024),
+    sidebar: Color(0xFFF2C6CE),
+    error: Color(0xFFFF5C7A),
+    textPrimary: Color(0xFF2B2024),
+    textSecondary: Color(0xFFFBF6F5),
+    textTitle: Color(0xFFFBF6F5),
   );
 
   static AppColors of(AppThemeName name) {
     switch (name) {
-      case AppThemeName.yellowNeon:
-        return yellowNeon;
-      case AppThemeName.blue:
-        return blue;
-      case AppThemeName.silver:
-        return silver;
-      case AppThemeName.pinkRose:
-        return pinkRose;
+      case AppThemeName.yellowLight:
+        return yellowLight;
+      case AppThemeName.yellowDark:
+        return yellowDark;
+      case AppThemeName.blueLight:
+        return blueLight;
+      case AppThemeName.blueDark:
+        return blueDark;
+      case AppThemeName.silverLight:
+        return silverLight;
+      case AppThemeName.silverDark:
+        return silverDark;
+      case AppThemeName.pinkLight:
+        return pinkLight;
+      case AppThemeName.pinkDark:
+        return pinkDark;
     }
   }
 }
