@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'shared/widgets/app_text_field.dart';
 import 'shared/widgets/app_button.dart';
+import 'shared/widgets/empty_state.dart';
+import 'shared/widgets/confirm_dialog.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,17 +68,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  final TextEditingController _testController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -114,18 +107,40 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            AppTextField(
+              label: "Email",
+              hint: "you@example.com",
+              controller: _testController,
+            ),
+            AppButton(
+              label: "Print Field Value",
+              onPressed: () {
+                print("You typed: ${_testController.text}");
+              },
+            ),
+            EmptyState(
+              message: "No routines yet. Add your first one!",
+              icon: Icons.checklist,
+            ),
+            AppButton(
+              label: "Delete Item",
+              variant: AppButtonVariant.danger,
+              onPressed: () {
+                showDialog(
+                  // native Flutter function
+                  context: context,
+                  builder: (context) => ConfirmDialog(
+                    title: "Delete Routine?",
+                    message: "This action cannot be undone.",
+                    onConfirm: () {
+                      print("Item deleted!");
+                    },
+                  ),
+                );
+              },
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
