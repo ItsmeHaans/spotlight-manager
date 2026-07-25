@@ -7,7 +7,9 @@ import 'shared/widgets/empty_state.dart';
 import 'shared/widgets/confirm_dialog.dart';
 import 'core/router/app_router.dart';
 import '../../features/auth/screens/login_screen.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart'; // native package
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'core/theme/theme.dart';
+import 'core/theme/theme_provider.dart'; // native package
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +19,7 @@ Future<void> main() async {
     url: dotenv.env['SUPABASE_URL']!,
     anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

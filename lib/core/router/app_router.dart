@@ -4,6 +4,10 @@ import 'package:supabase_flutter/supabase_flutter.dart'; // native package
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/signup_screen.dart';
 import '../../shared/widgets/app_button.dart';
+import '../theme/theme.dart';
+import '../theme/theme_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // native package — add this import
+import '../../features/home/screens/home_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/login',
@@ -28,21 +32,17 @@ final appRouter = GoRouter(
   routes: [
     GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
     GoRoute(path: '/signup', builder: (context, state) => const SignupScreen()),
-    GoRoute(
-      path: '/home',
-      builder: (context, state) => Scaffold(
-        body: Center(
-          child: AppButton(
-            label: "Log Out",
-            onPressed: () async {
-              await Supabase.instance.client.auth
-                  .signOut(); // native Supabase method
-              // No manual navigation needed — GoRouter's redirect logic sends you
-              // back to /login automatically, the instant auth state changes.
-            },
+    ShellRoute(
+      // native GoRouter — wraps matching routes with a persistent shell
+      builder: (context, state, child) => HomeShell(child: child),
+      routes: [
+        GoRoute(
+          path: '/home',
+          builder: (context, state) => const Scaffold(
+            body: Center(child: Text('Dashboard content goes here')),
           ),
         ),
-      ),
+      ],
     ),
   ],
 );

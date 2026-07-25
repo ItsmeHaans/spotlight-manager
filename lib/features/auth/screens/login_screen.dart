@@ -4,16 +4,18 @@ import '../../../core/theme/theme.dart';
 import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/app_button.dart';
 import 'package:go_router/go_router.dart'; // native package
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // native package — add this import
+import '../../../core/theme/theme_provider.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   // StatefulWidget, not Stateless — this screen needs to remember loading/error state
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
@@ -30,6 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
+      await ref
+          .read(themeProvider.notifier)
+          .loadFromProfile(); // native Riverpod — ref.read for one-off actions, not watching
       // TODO: navigate to /home once login succeeds — added once GoRouter navigation is wired for real
     } on AuthException catch (e) {
       // native Supabase exception type
@@ -45,8 +50,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final colors =
-        AppThemes.blueLight; // placeholder, same as your other widgets for now
+    final colors = AppThemes.of(
+      ref.watch(themeProvider),
+    ); // placeholder, same as your other widgets for now
 
     return Scaffold(
       // native Flutter widget — the basic screen frame

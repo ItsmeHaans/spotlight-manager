@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/theme.dart';
 import 'app_button.dart';
+import '../../core/theme/theme_provider.dart';
 
-class ConfirmDialog extends StatelessWidget {
+class ConfirmDialog extends ConsumerWidget {
   final String title;
   final String message;
   final String confirmLabel;
@@ -17,9 +19,10 @@ class ConfirmDialog extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final colors =
-        AppThemes.blueLight; // placeholder, same as the others for now
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = AppThemes.of(
+      ref.watch(themeProvider),
+    ); // placeholder, same as the others for now
 
     return AlertDialog(
       // native Flutter widget — a built-in popup dialog box

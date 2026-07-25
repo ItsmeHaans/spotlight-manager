@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // native package — add this import
+import '../../core/theme/theme_provider.dart';
 import '../../core/theme/theme.dart';
 
 enum AppButtonVariant { primary, secondary, danger }
 
-class AppButton extends StatelessWidget {
+class AppButton extends ConsumerWidget {
   final String label;
   final VoidCallback? onPressed;
   final AppButtonVariant variant;
@@ -19,10 +20,11 @@ class AppButton extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // TODO: pull colors from the active theme (via Riverpod) instead of a hardcoded example
-    final colors =
-        AppThemes.blueLight; // placeholder until theme provider exists
+    final colors = AppThemes.of(
+      ref.watch(themeProvider),
+    ); // placeholder until theme provider exists
 
     Color backgroundColor;
     switch (variant) {

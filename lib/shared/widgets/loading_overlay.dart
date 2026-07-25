@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/theme.dart';
 
-class LoadingOverlay extends StatelessWidget {
+import '../../core/theme/theme_provider.dart';
+
+class LoadingOverlay extends ConsumerWidget {
   final bool isLoading;
   final Widget
   child; // native concept: any widget can be a "child" — Flutter's core composition pattern
@@ -13,9 +16,10 @@ class LoadingOverlay extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final colors =
-        AppThemes.blueLight; // placeholder, same as the others for now
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = AppThemes.of(
+      ref.watch(themeProvider),
+    ); // placeholder, same as the others for now
 
     return Stack(
       // native Flutter widget — stacks children on top of each other, not side by side

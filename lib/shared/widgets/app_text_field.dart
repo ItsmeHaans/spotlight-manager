@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // native package — add this import
+import '../../core/theme/theme_provider.dart';
 import '../../core/theme/theme.dart';
 
-class AppTextField extends StatelessWidget {
+class AppTextField extends ConsumerWidget {
   final String label;
   final String? hint;
   final TextEditingController controller;
@@ -20,9 +22,10 @@ class AppTextField extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final colors =
-        AppThemes.blueLight; // placeholder, same as AppButton for now
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colors = AppThemes.of(
+      ref.watch(themeProvider),
+    ); // placeholder, same as AppButton for now
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
