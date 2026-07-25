@@ -5,6 +5,9 @@ import 'shared/widgets/app_text_field.dart';
 import 'shared/widgets/app_button.dart';
 import 'shared/widgets/empty_state.dart';
 import 'shared/widgets/confirm_dialog.dart';
+import 'core/router/app_router.dart';
+import '../../features/auth/screens/login_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // native package
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,27 +26,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    return MaterialApp.router(
+      title: 'Spotlight Manager',
+      routerConfig: appRouter, // hands your router map to the app
     );
   }
 }

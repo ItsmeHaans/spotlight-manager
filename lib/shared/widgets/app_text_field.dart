@@ -29,7 +29,7 @@ class AppTextField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: AppTypography.caption.copyWith(color: colors.textSecondary),
+          style: AppTypography.caption.copyWith(color: colors.background),
         ),
         const SizedBox(height: 4),
         TextField(
