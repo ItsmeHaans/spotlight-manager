@@ -17,9 +17,22 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
 
-  static const _appName = 'YourAppName'; // swap in your real app name
+  static const _lines = ['Spotlight', 'Manager'];
   static const _totalDuration = Duration(milliseconds: 1500);
-  static const _navDelayAfterAnim = Duration(milliseconds: 700);
+  static const _navDelayAfterAnim = Duration(milliseconds: 1500);
+
+  // --- tune these to match Figma exactly ---
+  static const double _logoAspect = 588 / 392; // width:height of whiteIcon.svg
+
+  // landscape (MacBook Air frame): icon left, text right
+  static const double _landscapeIconWidthFraction = 0.24; // % of screen width
+  static const double _landscapeFontFraction = 0.045; // % of screen width
+  static const double _landscapeGapFraction = 0.03;
+
+  // portrait (Frame 20): icon top, text below, centered
+  static const double _portraitIconWidthFraction = 0.45; // % of screen width
+  static const double _portraitFontFraction = 0.09; // % of screen width
+  static const double _portraitGapFraction = 0.04;
 
   @override
   void initState() {
@@ -30,10 +43,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
 
   Future<void> _redirect() async {
-    // wait for the animation to finish, then a short beat, then navigate
     await Future.delayed(_totalDuration + _navDelayAfterAnim);
     if (!mounted) return;
-
     final isLoggedIn = Supabase.instance.client.auth.currentSession != null;
     context.go(isLoggedIn ? '/home' : '/login');
   }
@@ -46,16 +57,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final isDesktop = MediaQuery.of(context).size.width >= 700;
-
-    // --- sizes pulled from Figma ---
-    // desktop frame 1731x1080 -> used ~1:1 as logical px
-    // phone frame 1080x2400 -> assumed 3x export, divided by 3 for logical px
-    final imageSize = isDesktop
-        ? const Size(588, 392)
-        : const Size(588 / 3, 392 / 3); // ~196 x 131
-    final fontSize = isDesktop ? 150.0 : 120.0 / 3; // 150 desktop, 40 phone
-
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -68,21 +69,66 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
             ],
           ),
         ),
-        child: Center(
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              final t = _controller.value;
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _AnimatedLogo(t: t, size: imageSize),
-                  const SizedBox(height: 24),
-                  _AnimatedLetters(t: t, text: _appName, fontSize: fontSize),
-                ],
-              );
-            },
-          ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final width = constraints.maxWidth;
+            final height = constraints.maxHeight;
+            final isLandscape = width > height;
+
+            final iconWidth =
+                width *
+                (isLandscape
+                    ? _landscapeIconWidthFraction
+                    : _portraitIconWidthFraction);
+            final iconHeight = iconWidth / _logoAspect;
+            final fontSize =
+                width *
+                (isLandscape
+                    ? _landscapeFontFraction * 2
+                    : _portraitFontFraction);
+            final gap =
+                width *
+                (isLandscape ? _landscapeGapFraction : _portraitGapFraction);
+
+            return Center(
+              child: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  final t = _controller.value;
+                  final logo = _AnimatedLogo(
+                    t: t,
+                    width: iconWidth,
+                    height: iconHeight,
+                  );
+                  final text = _AnimatedText(
+                    t: t,
+                    lines: _lines,
+                    fontSize: fontSize,
+                    alignLeft: isLandscape,
+                  );
+
+                  return isLandscape
+                      ? Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            logo,
+                            SizedBox(width: gap),
+                            text,
+                          ],
+                        )
+                      : Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            logo,
+                            SizedBox(height: gap),
+                            text,
+                          ],
+                        );
+                },
+              ),
+            );
+          },
         ),
       ),
     );
@@ -92,9 +138,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 /// Fades + scales the logo in over the first 35% of the timeline.
 class _AnimatedLogo extends StatelessWidget {
   final double t;
-  final Size size;
+  final double width;
+  final double height;
 
-  const _AnimatedLogo({required this.t, required this.size});
+  const _AnimatedLogo({
+    required this.t,
+    required this.width,
+    required this.height,
+  });
 
   static const _start = 0.0;
   static const _end = 0.35;
@@ -107,70 +158,83 @@ class _AnimatedLogo extends StatelessWidget {
     return Opacity(
       opacity: eased,
       child: Transform.scale(
-        scale: 0.85 + (0.15 * eased), // 0.85 -> 1.0
+        scale: 0.85 + (0.15 * eased),
         child: SvgPicture.asset(
-          'assets/svg/whiteIcon.svg',
-          width: size.width,
-          height: size.height,
+          'assets/svg/whiteLogo.png',
+          width: width,
+          height: height,
         ),
       ),
     );
   }
 }
 
-/// Reveals [text] one letter at a time, each with its own fade + upward ease,
-/// staggered so letters ripple in quickly rather than popping together.
-class _AnimatedLetters extends StatelessWidget {
+/// Reveals [lines] letter by letter (across both lines, in reading order),
+/// each with its own fade + upward ease, staggered for a quick ripple-in.
+class _AnimatedText extends StatelessWidget {
   final double t;
-  final String text;
+  final List<String> lines;
   final double fontSize;
+  final bool alignLeft;
 
-  const _AnimatedLetters({
+  const _AnimatedText({
     required this.t,
-    required this.text,
+    required this.lines,
     required this.fontSize,
+    required this.alignLeft,
   });
 
-  // text animates across this slice of the overall timeline
   static const _groupStart = 0.35;
   static const _groupEnd = 1.0;
-  // how long (as a fraction of the group range) each individual letter takes
   static const _letterSpan = 0.4;
 
   @override
   Widget build(BuildContext context) {
-    final letters = text.characters.toList();
-    final n = letters.length;
+    final allLetters = lines.expand((line) => line.characters).toList();
+    final n = allLetters.length;
     final groupRange = _groupEnd - _groupStart;
-    // available range for stagger start-points, so the last letter's
-    // animation still finishes exactly at _groupEnd
     final staggerRange = groupRange * (1 - _letterSpan);
     final letterDuration = groupRange * _letterSpan;
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(letters.length, (i) {
-        final start = _groupStart + (n > 1 ? staggerRange * (i / (n - 1)) : 0);
-        final end = start + letterDuration;
+    int globalIndex = 0;
 
-        final localT = ((t - start) / (end - start)).clamp(0.0, 1.0);
-        final eased = Curves.easeOut.transform(localT);
+    Widget buildLetter(String letter) {
+      final i = globalIndex++;
+      final start = _groupStart + (n > 1 ? staggerRange * (i / (n - 1)) : 0);
+      final end = start + letterDuration;
+      final localT = ((t - start) / (end - start)).clamp(0.0, 1.0);
+      final eased = Curves.easeOut.transform(localT);
 
-        return Opacity(
-          opacity: eased,
-          child: Transform.translate(
-            offset: Offset(0, (1 - eased) * 12), // subtle rise while fading in
-            child: Text(
-              letters[i],
-              style: GoogleFonts.inter(
-                fontSize: fontSize,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
+      return Opacity(
+        opacity: eased,
+        child: Transform.translate(
+          offset: Offset(0, (1 - eased) * 12),
+          child: Text(
+            letter,
+            style: GoogleFonts.inter(
+              fontSize: fontSize,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+              height: 1.05,
             ),
           ),
-        );
-      }),
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: alignLeft
+          ? CrossAxisAlignment.start
+          : CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: lines
+          .map(
+            (line) => Row(
+              mainAxisSize: MainAxisSize.min,
+              children: line.characters.map(buildLetter).toList(),
+            ),
+          )
+          .toList(),
     );
   }
 }
