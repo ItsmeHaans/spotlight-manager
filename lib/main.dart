@@ -10,6 +10,11 @@ import '../../features/auth/screens/login_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/theme/theme.dart';
 import 'core/theme/theme_provider.dart'; // native package
+import 'package:window_manager/window_manager.dart'; // native package (desktop-only)
+
+import 'package:flutter/foundation.dart' show kIsWeb; // native Flutter
+import 'dart:io'
+    show Platform; // native Dart — lets us check what platform we're on
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +24,25 @@ Future<void> main() async {
     url: dotenv.env['SUPABASE_URL']!,
     anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
+  if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+    await windowManager.ensureInitialized();
+    // native Dart — only run this on desktop
+    await windowManager.ensureInitialized(); // native window_manager
+    const windowOptions = WindowOptions(
+      size: Size(
+        1038,
+        648,
+      ), // native Flutter type — pick whatever fixed size/ratio you want (this is a 1.6:1 ratio)
+      center: true,
+      titleBarStyle: TitleBarStyle.normal,
+    );
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.setResizable(
+        true,
+      ); // set false if you want it truly locked
+    });
+  }
   runApp(const ProviderScope(child: const MyApp()));
 }
 

@@ -42,6 +42,7 @@ class AppTextField extends ConsumerWidget {
           style: AppTypography.body.copyWith(color: colors.textSecondary),
           decoration: InputDecoration(
             hintText: hint,
+            hintStyle: AppTypography.body.copyWith(color: colors.background),
             errorText: errorText,
             filled: true,
             fillColor: colors.primary,

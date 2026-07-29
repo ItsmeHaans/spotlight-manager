@@ -21,6 +21,20 @@ class AppColors {
   final Color textPrimary;
   final Color textSecondary;
   final Color textTitle;
+  final String logoPath;
+  final String dashboardPath;
+  final String routinePath;
+  final String shoplistPath;
+  final String calendarPath;
+  final String statisticsPath;
+  final String goalPath;
+  final String notesPath;
+  final String financialPath;
+  final String wishlistPath;
+  final String arrowPath;
+  final String homePath;
+  final String inputPath;
+  final String profilePath;
 
   const AppColors({
     required this.primary,
@@ -31,6 +45,20 @@ class AppColors {
     required this.textPrimary,
     required this.textSecondary,
     required this.textTitle,
+    required this.logoPath,
+    required this.dashboardPath,
+    required this.routinePath,
+    required this.shoplistPath,
+    required this.calendarPath,
+    required this.statisticsPath,
+    required this.goalPath,
+    required this.notesPath,
+    required this.financialPath,
+    required this.wishlistPath,
+    required this.arrowPath,
+    required this.homePath,
+    required this.inputPath,
+    required this.profilePath,
   });
 }
 
@@ -44,6 +72,20 @@ class AppThemes {
     textPrimary: Color(0xFF2E2C1E),
     textSecondary: Color(0xFFFBFBF2),
     textTitle: Color(0xFF2E2C1E),
+    logoPath: 'assets/svg/yellowIcon.svg',
+    dashboardPath: 'assets/svg/yellowDashboard.svg',
+    routinePath: 'assets/svg/yellowRoutine.svg',
+    shoplistPath: 'assets/svg/yellowShoplist.svg',
+    calendarPath: 'assets/svg/yellowCalendar.svg',
+    statisticsPath: 'assets/svg/yellowStatistics.svg',
+    goalPath: 'assets/svg/yellowGoal.svg',
+    notesPath: 'assets/svg/yellowNotes.svg',
+    financialPath: 'assets/svg/yellowFinancial.svg',
+    wishlistPath: 'assets/svg/yellowWishlist.svg',
+    arrowPath: 'assets/svg/yellowArrow.svg',
+    homePath: 'assets/svg/yellowHome.svg',
+    inputPath: 'assets/svg/yellowInput.svg',
+    profilePath: 'assets/svg/yellowProfile.svg',
   );
   static const yellowDark = AppColors(
     primary: Color(0xFFC9BE3F),
@@ -54,6 +96,20 @@ class AppThemes {
     textPrimary: Color(0xFF2E2C1E),
     textSecondary: Color(0xFFFBFBF2),
     textTitle: Color(0xFFFBFBF2),
+    logoPath: 'assets/svg/yellowIcon.svg',
+    dashboardPath: 'assets/svg/yellowDashboard.svg',
+    routinePath: 'assets/svg/yellowRoutine.svg',
+    shoplistPath: 'assets/svg/yellowShoplist.svg',
+    calendarPath: 'assets/svg/yellowCalendar.svg',
+    statisticsPath: 'assets/svg/yellowStatistics.svg',
+    goalPath: 'assets/svg/yellowGoal.svg',
+    notesPath: 'assets/svg/yellowNotes.svg',
+    financialPath: 'assets/svg/yellowFinancial.svg',
+    wishlistPath: 'assets/svg/yellowWishlist.svg',
+    arrowPath: 'assets/svg/yellowArrow.svg',
+    homePath: 'assets/svg/yellowHome.svg',
+    inputPath: 'assets/svg/yellowInput.svg',
+    profilePath: 'assets/svg/yellowProfile.svg',
   );
 
   static const blueLight = AppColors(
@@ -65,6 +121,20 @@ class AppThemes {
     textPrimary: Color(0xFF1E2530),
     textSecondary: Color(0xFFF4F6F9),
     textTitle: Color(0xFF1E2530),
+    logoPath: 'assets/svg/blueIcon.svg',
+    dashboardPath: 'assets/svg/blueDashboard.svg',
+    routinePath: 'assets/svg/blueRoutine.svg',
+    shoplistPath: 'assets/svg/blueShoplist.svg',
+    calendarPath: 'assets/svg/blueCalendar.svg',
+    statisticsPath: 'assets/svg/blueStatistics.svg',
+    goalPath: 'assets/svg/blueGoal.svg',
+    notesPath: 'assets/svg/blueNotes.svg',
+    financialPath: 'assets/svg/blueFinancial.svg',
+    wishlistPath: 'assets/svg/blueWishlist.svg',
+    arrowPath: 'assets/svg/blueArrow.svg',
+    homePath: 'assets/svg/blueHome.svg',
+    inputPath: 'assets/svg/blueInput.svg',
+    profilePath: 'assets/svg/blueProfile.svg',
   );
 
   static const blueDark = AppColors(
@@ -76,6 +146,20 @@ class AppThemes {
     textPrimary: Color(0xFF1E2530),
     textSecondary: Color(0xFFF4F6F9),
     textTitle: Color(0xFFF4F6F9),
+    logoPath: 'assets/svg/blueIcon.svg',
+    dashboardPath: 'assets/svg/blueDashboard.svg',
+    routinePath: 'assets/svg/blueRoutine.svg',
+    shoplistPath: 'assets/svg/blueShoplist.svg',
+    calendarPath: 'assets/svg/blueCalendar.svg',
+    statisticsPath: 'assets/svg/blueStatistics.svg',
+    goalPath: 'assets/svg/blueGoal.svg',
+    notesPath: 'assets/svg/blueNotes.svg',
+    financialPath: 'assets/svg/blueFinancial.svg',
+    wishlistPath: 'assets/svg/blueWishlist.svg',
+    arrowPath: 'assets/svg/blueArrow.svg',
+    homePath: 'assets/svg/blueHome.svg',
+    inputPath: 'assets/svg/blueInput.svg',
+    profilePath: 'assets/svg/blueProfile.svg',
   );
 
   static const silverLight = AppColors(
@@ -87,6 +171,20 @@ class AppThemes {
     textPrimary: Color(0xFF2A2E33),
     textSecondary: Color(0xFFF5F6F7),
     textTitle: Color(0xFF2A2E33),
+    logoPath: 'assets/svg/silverIcon.svg',
+    dashboardPath: 'assets/svg/silverDashboard.svg',
+    routinePath: 'assets/svg/silverRoutine.svg',
+    shoplistPath: 'assets/svg/silverShoplist.svg',
+    calendarPath: 'assets/svg/silverCalendar.svg',
+    statisticsPath: 'assets/svg/silverStatistics.svg',
+    goalPath: 'assets/svg/silverGoal.svg',
+    notesPath: 'assets/svg/silverNotes.svg',
+    financialPath: 'assets/svg/silverFinancial.svg',
+    wishlistPath: 'assets/svg/silverWishlist.svg',
+    arrowPath: 'assets/svg/silverArrow.svg',
+    homePath: 'assets/svg/silverHome.svg',
+    inputPath: 'assets/svg/silverInput.svg',
+    profilePath: 'assets/svg/silverProfile.svg',
   );
   static const silverDark = AppColors(
     primary: Color(0xFF6E7A85),
@@ -97,6 +195,20 @@ class AppThemes {
     textPrimary: Color(0xFF2A2E33),
     textSecondary: Color(0xFFF5F6F7),
     textTitle: Color(0xFFF5F6F7),
+    logoPath: 'assets/svg/silverIcon.svg',
+    dashboardPath: 'assets/svg/silverDashboard.svg',
+    routinePath: 'assets/svg/silverRoutine.svg',
+    shoplistPath: 'assets/svg/silverShoplist.svg',
+    calendarPath: 'assets/svg/silverCalendar.svg',
+    statisticsPath: 'assets/svg/silverStatistics.svg',
+    goalPath: 'assets/svg/silverGoal.svg',
+    notesPath: 'assets/svg/silverNotes.svg',
+    financialPath: 'assets/svg/silverFinancial.svg',
+    wishlistPath: 'assets/svg/silverWishlist.svg',
+    arrowPath: 'assets/svg/silverArrow.svg',
+    homePath: 'assets/svg/silverHome.svg',
+    inputPath: 'assets/svg/silverInput.svg',
+    profilePath: 'assets/svg/silverProfile.svg',
   );
 
   static const pinkLight = AppColors(
@@ -108,6 +220,20 @@ class AppThemes {
     textPrimary: Color(0xFF2B2024),
     textSecondary: Color(0xFFFBF6F5),
     textTitle: Color(0xFF2B2024),
+    logoPath: 'assets/svg/pinkIcon.svg',
+    dashboardPath: 'assets/svg/pinkDashboard.svg',
+    routinePath: 'assets/svg/pinkRoutine.svg',
+    shoplistPath: 'assets/svg/pinkShoplist.svg',
+    calendarPath: 'assets/svg/pinkCalendar.svg',
+    statisticsPath: 'assets/svg/pinkStatistics.svg',
+    goalPath: 'assets/svg/pinkGoal.svg',
+    notesPath: 'assets/svg/pinkNotes.svg',
+    financialPath: 'assets/svg/pinkFinancial.svg',
+    wishlistPath: 'assets/svg/pinkWishlist.svg',
+    arrowPath: 'assets/svg/pinkArrow.svg',
+    homePath: 'assets/svg/pinkHome.svg',
+    inputPath: 'assets/svg/pinkInput.svg',
+    profilePath: 'assets/svg/pinkProfile.svg',
   );
 
   static const pinkDark = AppColors(
@@ -119,6 +245,20 @@ class AppThemes {
     textPrimary: Color(0xFF2B2024),
     textSecondary: Color(0xFFFBF6F5),
     textTitle: Color(0xFFFBF6F5),
+    logoPath: 'assets/svg/pinkIcon.svg',
+    dashboardPath: 'assets/svg/pinkDashboard.svg',
+    routinePath: 'assets/svg/pinkRoutine.svg',
+    shoplistPath: 'assets/svg/pinkShoplist.svg',
+    calendarPath: 'assets/svg/pinkCalendar.svg',
+    statisticsPath: 'assets/svg/pinkStatistics.svg',
+    goalPath: 'assets/svg/pinkGoal.svg',
+    notesPath: 'assets/svg/pinkNotes.svg',
+    financialPath: 'assets/svg/pinkFinancial.svg',
+    wishlistPath: 'assets/svg/pinkWishlist.svg',
+    arrowPath: 'assets/svg/pinkArrow.svg',
+    homePath: 'assets/svg/pinkHome.svg',
+    inputPath: 'assets/svg/pinkInput.svg',
+    profilePath: 'assets/svg/pinkProfile.svg',
   );
 
   static AppColors of(AppThemeName name) {
@@ -151,7 +291,7 @@ class AppTypography {
       GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w600);
 
   static TextStyle get body =>
-      GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.normal);
+      GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w500);
 
   static TextStyle get caption =>
       GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.normal);
