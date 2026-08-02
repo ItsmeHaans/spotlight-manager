@@ -5,6 +5,7 @@ import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/signup_screen.dart';
 import '../../features/auth/screens/splash_screen.dart';
 import '../../features/auth/screens/profile_form_screen.dart'; // renamed import target
+import '../../features/auth/screens/theme_picker_screen.dart'; // renamed import target
 import '../../shared/widgets/app_button.dart';
 import '../theme/theme.dart';
 import '../theme/theme_provider.dart';
@@ -23,6 +24,28 @@ class _PlaceholderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(body: Center(child: Text('$title screen — coming soon')));
   }
+}
+
+bool? _themeChosenCache;
+String? _lastThemeCheckedUserId;
+
+Future<bool> _isThemeChosen(String userId) async {
+  if (_themeChosenCache != null && _lastThemeCheckedUserId == userId) {
+    return _themeChosenCache!;
+  }
+
+  final response = await Supabase.instance.client
+      .from('profiles')
+      .select(
+        'theme_chosen',
+      ) // CHANGED — check this new column, not theme_preference
+      .eq('id', userId)
+      .maybeSingle();
+
+  final chosen = response != null && response['theme_chosen'] == true;
+  _themeChosenCache = chosen;
+  _lastThemeCheckedUserId = userId;
+  return chosen;
 }
 
 // Cache so we don't hit the DB on every navigation — only once per login
@@ -56,6 +79,14 @@ Future<bool> _isProfileComplete(String userId) async {
 void invalidateProfileCache() {
   _profileCompleteCache = null;
   _lastCheckedUserId = null;
+  _themeChosenCache = null;
+  _lastThemeCheckedUserId = null;
+}
+
+void markThemeChosen(String userId) {
+  // NEW — sets the cache directly, no DB round-trip
+  _themeChosenCache = true;
+  _lastThemeCheckedUserId = userId;
 }
 
 final appRouter = GoRouter(
@@ -69,38 +100,76 @@ final appRouter = GoRouter(
     final isGoingToLogin =
         state.matchedLocation == '/login' || state.matchedLocation == '/signup';
     final isSplash = state.matchedLocation == '/splash';
+    final isGoingToThemePicker =
+        state.matchedLocation == '/theme-picker';
     final isGoingToProfileForm = state.matchedLocation == '/profileform';
 
-    if (isSplash)
-      return null; // let splash screen decide, don't force-redirect it
+    // If on splash screen and not logged in, show splash; otherwise proceed
+    if (isSplash) {
+      if (!isLoggedIn) {
+        return null;
+      }
+      // If logged in, fall through to check onboarding status
+    }
 
     if (!isLoggedIn) {
-      _profileCompleteCache = null; // reset cache on logout
+      _profileCompleteCache = null;
       _lastCheckedUserId = null;
+      _themeChosenCache = null;
+      _lastThemeCheckedUserId = null;
       if (!isGoingToLogin) return '/login';
       return null;
     }
 
-    // logged in past this point
-    if (isGoingToLogin)
-      return '/home'; // will get bounced to /profileform below if needed
+    if (isGoingToLogin) return '/home';
 
-    final complete = await _isProfileComplete(user.id);
+    final themeChosen = await _isThemeChosen(user!.id);
+    final profileComplete = await _isProfileComplete(user.id);
+    final isOnboardingComplete = themeChosen && profileComplete;
 
-    if (!complete && !isGoingToProfileForm) {
-      return '/profileform'; // force profile completion before anything else
+    if (!isOnboardingComplete) {
+      if (!themeChosen) {
+        if (!isGoingToThemePicker) {
+          return '/theme-picker';
+        }
+      } else {
+        // theme chosen but profile not complete
+        if (!isGoingToProfileForm) {
+          return '/profileform';
+        }
+      }
+      return null;
+    } else {
+      // onboarding complete: redirect to home if not already in the app
+      final isInApp = state.matchedLocation.startsWith('/home') ||
+                      state.matchedLocation.startsWith('/routines') ||
+                      state.matchedLocation.startsWith('/goals') ||
+                      state.matchedLocation.startsWith('/shopping') ||
+                      state.matchedLocation.startsWith('/calendar') ||
+                      state.matchedLocation.startsWith('/transactions') ||
+                      state.matchedLocation.startsWith('/notes') ||
+                      state.matchedLocation.startsWith('/wishlist') ||
+                      state.matchedLocation.startsWith('/stats') ||
+                      state.matchedLocation.startsWith('/quick-input') ||
+                      state.matchedLocation.startsWith('/settings');
+      if (!isInApp) {
+        return '/home';
+      }
+      return null;
     }
-    if (complete && isGoingToProfileForm) {
-      return '/home'; // already filled in — don't let them revisit via URL/back button
-    }
-
-    return null;
   },
   routes: [
     GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
     GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
     GoRoute(path: '/signup', builder: (context, state) => const SignupScreen()),
-
+    GoRoute(
+      path: '/theme-picker',
+      builder: (context, state) => const ThemePickerScreen(),
+    ),
+    GoRoute(
+      path: '/profileform', // renamed from /profile
+      builder: (context, state) => const ProfileFormScreen(),
+    ),
     ShellRoute(
       builder: (context, state, child) => HomeShell(child: child),
       routes: [

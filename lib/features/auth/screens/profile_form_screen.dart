@@ -210,19 +210,16 @@ class _ProfileFormScreenState extends ConsumerState<ProfileFormScreen> {
     });
 
     try {
-      await Supabase.instance.client
-          .from('profiles')
-          .update({
-            'display_name': _nicknameController.text.trim(),
-            'full_name': _fullNameController.text.trim(),
-            'gender': _gender,
-            'date_of_birth': _dob?.toIso8601String().split('T').first,
-            'location': _locationController.text.trim(),
-            'bio': _bioController.text.trim(),
-            if (_avatarUrl != null) 'avatar_url': _avatarUrl,
-          })
-          .eq('id', userId);
-
+      await Supabase.instance.client.from('profiles').upsert({
+        'id': userId, // REQUIRED for upsert — this is what it matches on
+        'display_name': _nicknameController.text.trim(),
+        'full_name': _fullNameController.text.trim(),
+        'gender': _gender,
+        'date_of_birth': _dob?.toIso8601String().split('T').first,
+        'location': _locationController.text.trim(),
+        'bio': _bioController.text.trim(),
+        if (_avatarUrl != null) 'avatar_url': _avatarUrl,
+      });
       invalidateProfileCache(); // added — tell the router this user's profile is now complete
       if (mounted)
         context.go('/home'); // added — leave the form now that saving succeeded
@@ -254,7 +251,12 @@ class _ProfileFormScreenState extends ConsumerState<ProfileFormScreen> {
 
             return Center(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(AppSpacing.lg),
+                padding: EdgeInsets.only(
+                  top: AppSpacing.lg * 2.0,
+                  left: AppSpacing.lg,
+                  right: AppSpacing.lg,
+                  bottom: AppSpacing.lg,
+                ),
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: maxWidth),
                   child: Column(
@@ -498,6 +500,8 @@ class _AvatarPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = 1.1;
+    final scaledSize = size * scale;
     ImageProvider? image;
     if (pickedFile != null) {
       image = FileImage(pickedFile!);
@@ -511,8 +515,8 @@ class _AvatarPicker extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           Container(
-            width: size,
-            height: size,
+            width: scaledSize,
+            height: scaledSize,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: colors.primary,
@@ -521,13 +525,17 @@ class _AvatarPicker extends StatelessWidget {
                   : null,
             ),
             child: image == null
-                ? Icon(Icons.person, color: colors.background, size: size * 0.4)
+                ? Icon(
+                    Icons.person,
+                    color: colors.background,
+                    size: scaledSize * 0.4,
+                  )
                 : null,
           ),
           if (isUploading)
             Container(
-              width: size,
-              height: size,
+              width: scaledSize,
+              height: scaledSize,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.black38,
@@ -537,15 +545,15 @@ class _AvatarPicker extends StatelessWidget {
               ),
             ),
           Positioned(
-            bottom: 4,
-            right: 4,
+            bottom: 4 * scale,
+            right: 4 * scale,
             child: Container(
-              padding: const EdgeInsets.all(6),
+              padding: EdgeInsets.all(6 * scale),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: colors.background,
               ),
-              child: Icon(Icons.edit, size: 16, color: colors.primary),
+              child: Icon(Icons.edit, size: 16 * scale, color: colors.primary),
             ),
           ),
         ],
@@ -606,18 +614,19 @@ class _GenderField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = 1.1;
     return InkWell(
       onTap: () => _openPicker(context),
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: BorderRadius.circular(24 * scale),
       child: Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.sm,
+        padding: EdgeInsets.symmetric(
+          horizontal: AppSpacing.md * scale,
+          vertical: AppSpacing.sm * scale,
         ),
         decoration: BoxDecoration(
           color: colors.primary,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(24 * scale),
         ),
         child: Text(
           value ?? 'Gender',
