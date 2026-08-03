@@ -25,17 +25,22 @@ class HomeShell extends ConsumerWidget {
                 Expanded(child: child),
               ],
             )
-          : Stack(
-              fit: StackFit.expand,
-              // mobile — content behind, floating pill on top
-              children: [
-                Positioned.fill(child: child),
-                Align(
-                  // native Flutter — positions the pill at the bottom of the Stack
-                  alignment: Alignment.bottomCenter,
-                  child: AppBottomNav(colors: colors),
-                ),
-              ],
+          : LayoutBuilder(
+              builder: (context, constraints) {
+                final screenHeight = constraints.maxHeight;
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Positioned.fill(child: child),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: screenHeight * 0.03, // 10% from bottom
+                      child: Center(child: AppBottomNav(colors: colors)),
+                    ),
+                  ],
+                );
+              },
             ),
       bottomNavigationBar: null,
     );

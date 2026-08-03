@@ -295,73 +295,65 @@ class _AppBottomNavState extends State<AppBottomNav> {
 
     final icons = [colors.homePath, colors.inputPath, colors.profilePath];
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: AppSpacing.md),
-        child: Center(
-          child: Container(
-            width: pillWidth,
-            height: pillHeight,
-            decoration: BoxDecoration(
-              color: colors.secondary,
-              borderRadius: BorderRadius.circular(pillHeight / 2),
+    return Container(
+      width: pillWidth,
+      height: pillHeight,
+      decoration: BoxDecoration(
+        color: colors.secondary,
+        borderRadius: BorderRadius.circular(pillHeight / 2),
+      ),
+      child: Stack(
+        children: [
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeOut,
+            left: selectedIndex * slotWidth + (slotWidth - circleSize) / 2,
+            top: (pillHeight - circleSize) / 2,
+            width: circleSize,
+            height: circleSize,
+            child: Container(
+              decoration: BoxDecoration(
+                color: colors.background,
+                shape: BoxShape.circle,
+              ),
             ),
-            child: Stack(
-              children: [
-                AnimatedPositioned(
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeOut,
-                  left:
-                      selectedIndex * slotWidth + (slotWidth - circleSize) / 2,
-                  top: (pillHeight - circleSize) / 2,
-                  width: circleSize,
-                  height: circleSize,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: colors.background,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-                Row(
-                  children: List.generate(3, (index) {
-                    final isHovered = _hoveredIndex == index;
-                    return SizedBox(
-                      width: slotWidth,
-                      height: pillHeight,
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        onEnter: (_) => setState(() => _hoveredIndex = index),
-                        onExit: (_) => setState(() {
-                          if (_hoveredIndex == index) _hoveredIndex = -1;
-                        }),
-                        child: GestureDetector(
-                          onTap: () => context.go(_routes[index]),
-                          child: Center(
-                            child: AnimatedScale(
-                              duration: const Duration(milliseconds: 150),
-                              scale: isHovered ? 1.15 : 1.0,
-                              curve: Curves.easeOut,
-                              child: SvgPicture.asset(
-                                icons[index],
-                                width: iconSize,
-                                height: iconSize,
-                                colorFilter: ColorFilter.mode(
-                                  colors.primary,
-                                  BlendMode.srcIn,
-                                ),
-                              ),
-                            ),
+          ),
+          Row(
+            children: List.generate(3, (index) {
+              final isHovered = _hoveredIndex == index;
+              return SizedBox(
+                width: slotWidth,
+                height: pillHeight,
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  onEnter: (_) => setState(() => _hoveredIndex = index),
+                  onExit: (_) => setState(() {
+                    if (_hoveredIndex == index) _hoveredIndex = -1;
+                  }),
+                  child: GestureDetector(
+                    onTap: () => context.go(_routes[index]),
+                    child: Center(
+                      child: AnimatedScale(
+                        duration: const Duration(milliseconds: 150),
+                        scale: isHovered ? 1.15 : 1.0,
+                        curve: Curves.easeOut,
+                        child: SvgPicture.asset(
+                          icons[index],
+                          width: iconSize,
+                          height: iconSize,
+                          colorFilter: ColorFilter.mode(
+                            colors.primary,
+                            BlendMode.srcIn,
                           ),
                         ),
                       ),
-                    );
-                  }),
+                    ),
+                  ),
                 ),
-              ],
-            ),
+              );
+            }),
           ),
-        ),
+        ],
       ),
     );
   }
