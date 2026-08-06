@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/theme/theme_provider.dart';
 import '../../../shared/widgets/app_card.dart';
+import '../../../shared/widgets/PageOptionsButton.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'; // for signOut()
 
 /// Root dashboard screen. Switches between the mobile 2x4 shortcut grid
 /// and the desktop bento-style overview depending on available width.
@@ -19,17 +21,18 @@ class DashboardScreen extends ConsumerWidget {
       builder: (context, constraints) {
         final isDesktop = constraints.maxWidth >= 700;
         return isDesktop
-            ? _DesktopDashboard(colors: colors)
-            : _MobileDashboard(colors: colors);
+            ? _DesktopDashboard(colors: colors, ref: ref)
+            : _MobileDashboard(colors: colors, ref: ref);
       },
     );
   }
 }
 
 class _MobileDashboard extends StatelessWidget {
-  const _MobileDashboard({required this.colors});
+  const _MobileDashboard({required this.colors, required this.ref});
 
   final AppColors colors;
+  final WidgetRef ref;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +66,7 @@ class _MobileDashboard extends StatelessWidget {
                     child: Text(
                       'Spotlight\nManager',
                       style: AppTypography.body.copyWith(
-                        color: colors.textPrimary,
+                        color: colors.textTitle,
                         fontSize: 26,
                         fontWeight: FontWeight.w700,
                         height: 1.3,
@@ -71,10 +74,17 @@ class _MobileDashboard extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.settings, color: colors.textPrimary),
-                    onPressed: () {
-                      // TODO: navigate to settings
-                    },
+                    icon: SvgPicture.asset(
+                      colors.settingPath,
+                      width: 24,
+                      height: 24,
+                      colorFilter: ColorFilter.mode(
+                        colors.textPrimary,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                    onPressed: () =>
+                        _openBaseOptionsSheet(context, ref, colors),
                   ),
                 ],
               ),
@@ -137,9 +147,10 @@ class _Shortcut {
 }
 
 class _DesktopDashboard extends StatelessWidget {
-  const _DesktopDashboard({required this.colors});
+  const _DesktopDashboard({required this.colors, required this.ref});
 
   final AppColors colors;
+  final WidgetRef ref;
 
   @override
   Widget build(BuildContext context) {
@@ -155,11 +166,23 @@ class _DesktopDashboard extends StatelessWidget {
               Text(
                 'How is your day, name?',
                 style: AppTypography.heading1.copyWith(
-                  fontSize: 24,
+                  fontSize: 20,
                   color: colors.textTitle,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              Icon(Icons.settings, color: colors.textPrimary),
+              GestureDetector(
+                onTap: () => _openBaseOptionsSheet(context, ref, colors),
+                child: SvgPicture.asset(
+                  colors.settingPath,
+                  width: 24,
+                  height: 24,
+                  colorFilter: ColorFilter.mode(
+                    colors.textPrimary,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: AppSpacing.lg),
@@ -322,4 +345,97 @@ class _BentoCard extends StatelessWidget {
       ),
     );
   }
+}
+
+void _openBaseOptionsSheet(
+  BuildContext context,
+  WidgetRef ref,
+  AppColors colors,
+) {
+  showDialog(
+    // was: showModalBottomSheet
+    context: context,
+    barrierColor:
+        Colors.black45, // native property — dim background behind the card
+    builder: (dialogContext) => Consumer(
+      builder: (context, ref, _) {
+        final currentTheme = ref.watch(themeProvider);
+        final isDark = currentTheme.name.contains('Dark');
+        final liveColors = AppThemes.of(currentTheme);
+
+        return Dialog(
+          // native Flutter — a centered floating card, replaces the old SafeArea+Padding root
+          backgroundColor: liveColors.background,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SwitchListTile(
+                  title: Text(
+                    "Dark Mode",
+                    style: TextStyle(color: liveColors.textTitle),
+                  ),
+                  value: isDark,
+                  onChanged: (value) {
+                    final baseName = currentTheme.name
+                        .replaceAll('Light', '')
+                        .replaceAll('Dark', '');
+                    final newTheme = AppThemeName.values.firstWhere(
+                      (t) => t.name == '$baseName${value ? 'Dark' : 'Light'}',
+                    );
+                    ref.read(themeProvider.notifier).setTheme(newTheme);
+                  },
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: ['yellow', 'blue', 'silver', 'pink'].map((color) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.xs,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          final suffix = isDark ? 'Dark' : 'Light';
+                          final newTheme = AppThemeName.values.firstWhere(
+                            (t) => t.name == '$color$suffix',
+                          );
+                          ref.read(themeProvider.notifier).setTheme(newTheme);
+                        },
+                        child: CircleAvatar(
+                          radius: 18,
+                          backgroundColor: AppThemes.of(
+                            AppThemeName.values.firstWhere(
+                              (t) => t.name == '${color}Light',
+                            ),
+                          ).primary,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                const Divider(),
+                ListTile(
+                  leading: Icon(Icons.logout, color: liveColors.error),
+                  title: Text(
+                    "Log Out",
+                    style: TextStyle(color: liveColors.error),
+                  ),
+                  onTap: () {
+                    Navigator.pop(dialogContext);
+                    Supabase.instance.client.auth.signOut();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    ),
+  );
 }

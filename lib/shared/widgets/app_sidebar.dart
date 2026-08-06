@@ -91,7 +91,7 @@ class AppSidebar extends StatelessWidget {
                     Text(
                       "Spotlight\nManager",
                       style: AppTypography.heading2.copyWith(
-                        color: colors.textTitle,
+                        color: colors.textPrimary,
                         height: 1.1,
                       ),
                     ),
@@ -199,7 +199,7 @@ class _SidebarItemState extends State<_SidebarItem> {
                   width: 22,
                   height: 22,
                   colorFilter: ColorFilter.mode(
-                    isSelected ? Colors.white : colors.textTitle,
+                    isSelected ? Colors.white : colors.textPrimary,
                     BlendMode.srcIn,
                   ),
                 ),
@@ -208,7 +208,7 @@ class _SidebarItemState extends State<_SidebarItem> {
                   child: Text(
                     entry.label,
                     style: TextStyle(
-                      color: isSelected ? Colors.white : colors.textTitle,
+                      color: isSelected ? Colors.white : colors.textPrimary,
                       fontWeight: isSelected
                           ? FontWeight.w700
                           : FontWeight.w500,
@@ -313,7 +313,7 @@ class _AppBottomNavState extends State<AppBottomNav> {
             height: circleSize,
             child: Container(
               decoration: BoxDecoration(
-                color: colors.background,
+                color: colors.textSecondary,
                 shape: BoxShape.circle,
               ),
             ),

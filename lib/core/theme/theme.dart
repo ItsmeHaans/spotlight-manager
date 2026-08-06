@@ -35,6 +35,7 @@ class AppColors {
   final String homePath;
   final String inputPath;
   final String profilePath;
+  final String settingPath;
 
   const AppColors({
     required this.primary,
@@ -59,6 +60,7 @@ class AppColors {
     required this.homePath,
     required this.inputPath,
     required this.profilePath,
+    required this.settingPath,
   });
 }
 
@@ -86,6 +88,7 @@ class AppThemes {
     homePath: 'assets/svg/yellowHome.svg',
     inputPath: 'assets/svg/yellowInput.svg',
     profilePath: 'assets/svg/yellowProfile.svg',
+    settingPath: 'assets/svg/YellowLightSetting.svg',
   );
   static const yellowDark = AppColors(
     primary: Color(0xFFC9BE3F),
@@ -110,6 +113,7 @@ class AppThemes {
     homePath: 'assets/svg/yellowHome.svg',
     inputPath: 'assets/svg/yellowInput.svg',
     profilePath: 'assets/svg/yellowProfile.svg',
+    settingPath: 'assets/svg/YellowDarkSetting.svg',
   );
 
   static const blueLight = AppColors(
@@ -135,6 +139,7 @@ class AppThemes {
     homePath: 'assets/svg/blueHome.svg',
     inputPath: 'assets/svg/blueInput.svg',
     profilePath: 'assets/svg/blueProfile.svg',
+    settingPath: 'assets/svg/BlueLightSetting.svg',
   );
 
   static const blueDark = AppColors(
@@ -160,6 +165,7 @@ class AppThemes {
     homePath: 'assets/svg/blueHome.svg',
     inputPath: 'assets/svg/blueInput.svg',
     profilePath: 'assets/svg/blueProfile.svg',
+    settingPath: 'assets/svg/BlueDarkSetting.svg',
   );
 
   static const silverLight = AppColors(
@@ -185,6 +191,7 @@ class AppThemes {
     homePath: 'assets/svg/silverHome.svg',
     inputPath: 'assets/svg/silverInput.svg',
     profilePath: 'assets/svg/silverProfile.svg',
+    settingPath: 'assets/svg/SilverLightSetting.svg',
   );
   static const silverDark = AppColors(
     primary: Color(0xFF6E7A85),
@@ -209,6 +216,7 @@ class AppThemes {
     homePath: 'assets/svg/silverHome.svg',
     inputPath: 'assets/svg/silverInput.svg',
     profilePath: 'assets/svg/silverProfile.svg',
+    settingPath: 'assets/svg/SilverDarkSetting.svg',
   );
 
   static const pinkLight = AppColors(
@@ -234,6 +242,7 @@ class AppThemes {
     homePath: 'assets/svg/pinkHome.svg',
     inputPath: 'assets/svg/pinkInput.svg',
     profilePath: 'assets/svg/pinkProfile.svg',
+    settingPath: 'assets/svg/PinkLightSetting.svg',
   );
 
   static const pinkDark = AppColors(
@@ -259,6 +268,7 @@ class AppThemes {
     homePath: 'assets/svg/pinkHome.svg',
     inputPath: 'assets/svg/pinkInput.svg',
     profilePath: 'assets/svg/pinkProfile.svg',
+    settingPath: 'assets/svg/PinkDarkSetting.svg',
   );
 
   static AppColors of(AppThemeName name) {
