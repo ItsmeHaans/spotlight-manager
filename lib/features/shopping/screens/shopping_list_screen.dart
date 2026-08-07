@@ -7,6 +7,10 @@ import '../../../shared/widgets/app_card.dart';
 import '../../../shared/widgets/empty_state.dart';
 import '../../../shared/widgets/confirm_dialog.dart';
 import '../providers/shopping_provider.dart';
+import '../screens/shopping_list_screen.dart';
+import '../providers/shopping_filter_provider.dart';
+import '../widgets/shopping_option_sheet.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ShoppingListScreen extends ConsumerWidget {
   const ShoppingListScreen({super.key});
@@ -14,17 +18,28 @@ class ShoppingListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = AppThemes.of(ref.watch(themeProvider));
-    final itemsAsync = ref.watch(shoppingListProvider);
+    final itemsAsync = ref.watch(filteredShoppingListProvider);
 
     return Scaffold(
       backgroundColor: colors.background,
       appBar: AppBar(
         title: const Text("Shopping List"),
         actions: [
+          InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: () => openShoppingOptionsSheet(context, ref),
+            child: Padding(
+              padding: const EdgeInsets.all(AppSpacing.sm),
+              child: SvgPicture.asset(
+                colors.settingPath,
+                width: 22,
+                height: 22,
+              ),
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () =>
-                context.go('/shopping/add'), // navigates to the Add screen
+            onPressed: () => context.go('/shopping/add'),
           ),
         ],
       ),
