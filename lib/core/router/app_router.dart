@@ -15,6 +15,7 @@ import '../../features/home/screens/dashboard_screen.dart';
 import '../../features/routines/screens/routine_list_screen.dart';
 import '../../features/shopping/screens/shopping_list_screen.dart';
 import '../../features/shopping/screens/add_item_sheet.dart';
+import '../../features/routines/screens/add_edit_routine_screen.dart';
 
 class _PlaceholderScreen extends StatelessWidget {
   final String title;
@@ -100,8 +101,7 @@ final appRouter = GoRouter(
     final isGoingToLogin =
         state.matchedLocation == '/login' || state.matchedLocation == '/signup';
     final isSplash = state.matchedLocation == '/splash';
-    final isGoingToThemePicker =
-        state.matchedLocation == '/theme-picker';
+    final isGoingToThemePicker = state.matchedLocation == '/theme-picker';
     final isGoingToProfileForm = state.matchedLocation == '/profileform';
 
     // If on splash screen and not logged in, show splash; otherwise proceed
@@ -141,17 +141,18 @@ final appRouter = GoRouter(
       return null;
     } else {
       // onboarding complete: redirect to home if not already in the app
-      final isInApp = state.matchedLocation.startsWith('/home') ||
-                      state.matchedLocation.startsWith('/routines') ||
-                      state.matchedLocation.startsWith('/goals') ||
-                      state.matchedLocation.startsWith('/shopping') ||
-                      state.matchedLocation.startsWith('/calendar') ||
-                      state.matchedLocation.startsWith('/transactions') ||
-                      state.matchedLocation.startsWith('/notes') ||
-                      state.matchedLocation.startsWith('/wishlist') ||
-                      state.matchedLocation.startsWith('/stats') ||
-                      state.matchedLocation.startsWith('/quick-input') ||
-                      state.matchedLocation.startsWith('/settings');
+      final isInApp =
+          state.matchedLocation.startsWith('/home') ||
+          state.matchedLocation.startsWith('/routines') ||
+          state.matchedLocation.startsWith('/goals') ||
+          state.matchedLocation.startsWith('/shopping') ||
+          state.matchedLocation.startsWith('/calendar') ||
+          state.matchedLocation.startsWith('/transactions') ||
+          state.matchedLocation.startsWith('/notes') ||
+          state.matchedLocation.startsWith('/wishlist') ||
+          state.matchedLocation.startsWith('/stats') ||
+          state.matchedLocation.startsWith('/quick-input') ||
+          state.matchedLocation.startsWith('/settings');
       if (!isInApp) {
         return '/home';
       }
@@ -180,6 +181,18 @@ final appRouter = GoRouter(
         GoRoute(
           path: '/routines',
           builder: (context, state) => const RoutineListScreen(),
+        ),
+        GoRoute(
+          path: '/routines/add',
+          builder: (context, state) => const AddEditRoutineScreen(),
+        ),
+        GoRoute(
+          path: '/routines/edit/:id',
+          builder: (context, state) {
+            // TODO: ambil Routine dari id (state.pathParameters['id']!),
+            // sama kayak pola /shopping/edit/:id yang sudah ada
+            return const AddEditRoutineScreen(); // sementara tanpa existingRoutine
+          },
         ),
         GoRoute(
           path: '/goals',

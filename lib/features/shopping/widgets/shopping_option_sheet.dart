@@ -8,6 +8,7 @@ import '../../../core/theme/theme_provider.dart';
 import '../providers/shopping_provider.dart';
 import '../providers/shopping_filter_provider.dart';
 import '../models/shopping_category.dart';
+import 'package:go_router/go_router.dart';
 
 void openShoppingOptionsSheet(BuildContext context, WidgetRef ref) {
   showDialog(
@@ -21,7 +22,7 @@ void openShoppingOptionsSheet(BuildContext context, WidgetRef ref) {
 
         // --- adaptive sizing: phone stays compact, desktop ~3x taller ---
         final screenSize = MediaQuery.of(context).size;
-        final isDesktop = screenSize.width >= 900;
+        final isDesktop = screenSize.width >= 700;
         const baseHeight = 340.0; // roughly the original base sheet's height
         final maxHeight = math.min(
           isDesktop ? baseHeight * 3 : baseHeight,
@@ -102,7 +103,6 @@ void openShoppingOptionsSheet(BuildContext context, WidgetRef ref) {
                       }).toList(),
                     ),
 
-                    // ============ ADDON: khusus Shopping (punya category) ============
                     const Divider(),
                     Text(
                       "Filter by Category",
@@ -134,6 +134,22 @@ void openShoppingOptionsSheet(BuildContext context, WidgetRef ref) {
                           ),
                         ),
                       ],
+                    ),
+
+                    const Divider(),
+                    ListTile(
+                      leading: Icon(
+                        Icons.add_circle_outline,
+                        color: liveColors.primary,
+                      ),
+                      title: Text(
+                        "Add Item",
+                        style: TextStyle(color: liveColors.textTitle),
+                      ),
+                      onTap: () {
+                        Navigator.pop(dialogContext); // tutup sheet dulu
+                        context.go('/shopping/add');
+                      },
                     ),
 
                     // ============ BASE: logout ============
